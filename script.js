@@ -1,6 +1,10 @@
+
 //Added the starting scores of the game.
 let playerScore = 0;
 let computerScore = 0;
+let rounds = 0;
+//create boolean var to track game status, enables stop after certain no. of rounds in function later
+let gameEnded = false;
 
 const rockButton = document.querySelector(".rock")
 const paperButton = document.querySelector(".paper")
@@ -8,6 +12,7 @@ const scissorsButton = document.querySelector(".scissors")
 const outcomeDiv = document.querySelector(".outcome")
 const playerSpan = document.querySelector(".player-score")
 const compSpan = document.querySelector(".computer-score")
+const resetGameDiv = document.querySelector(".reset")
 
 //Declared the computers random choices to return a sting.
 function getComputerChoice(){
@@ -22,107 +27,100 @@ function getComputerChoice(){
     
 }
 
-//created a prompt to get the human choice
-    //function getHumanChoice(){
-    //return prompt("Rock, paper, scissors?");
-    //}
-
-//console.log(getHumanChoice());
-
-
-
-
 //Created the function for the game that compares the computer and human choice, and gives scores based on choices.
 
-function playRound(playerSelection, computerChoice){
-    
+function playRound(playerSelection, computerChoice){ 
+    const p = document.querySelector(".outcome-p")
     if (playerSelection === computerChoice){
 //creates p element, adds text to p element, and adds the p element to DOM
-       const p = document.createElement("p")
        p.innerText = "it's a draw";
-       outcomeDiv.appendChild(p)
     } else if (playerSelection == "rock" && computerChoice == "paper"){
         computerScore ++ 
-        const p = document.createElement("p") 
         p.innerText = "paper beats rock, you lose";
-        outcomeDiv.appendChild(p)
     } else if (playerSelection == "paper" && computerChoice == "rock"){
         playerScore ++ ;
-        const p = document.createElement("p") 
         p.innerText = "paper beats rock, you win";
-        outcomeDiv.appendChild(p)
     } else if (playerSelection== "scissors" && computerChoice == "paper"){
         computerScore ++ 
-        const p = document.createElement("p") 
         p.innerText = "scissors beats paper, you win";
-        outcomeDiv.appendChild(p)
     } else if (playerSelection == "paper" && computerChoice == "scissors"){
         computerScore ++ 
-        const p = document.createElement("p") 
         p.innerText = "scissors beats paper, you lose";
-        outcomeDiv.appendChild(p)
     } else if (playerSelection == "scissors" && computerChoice == "rock"){
         computerScore ++ 
-        const p = document.createElement("p") 
         p.innerText = "rock beats scissors, you lose";
-        outcomeDiv.appendChild(p)
     } else if (playerSelection == "rock" && computerChoice == "scissors"){
         playerScore ++ 
-        const p = document.createElement("p") 
         p.innerText = "rock beats scissors, you win";
-        outcomeDiv.appendChild(p)
+    }
+    rounds++ //counts rounds played
+}
+
+//Adding the scores to the page
+const updateScores = (playerScore, computerScore) =>{
+    playerSpan.innerText = `Player: ${playerScore}`
+    compSpan.innerText = `Computer: ${computerScore}`
+}
+
+//function to update h2 element in html showing game result
+const whoWon = (playerScore, computerScore) => {
+    const h2 = document.querySelector("h2")
+    if (playerScore === 5){ 
+        gameEnded = true
+        h2.innerText = "YOU WON!"
+    } else if (computerScore === 5){
+        gameEnded = true
+        h2.innerText = "YOU LOST!"
+    }
+    //added gameEnded for when player/comp gets to 5 points and game is ended
+    if (gameEnded){
+        endGame()
     }
 }
 
-const whoWon = (playerScore, computerScore) => {
-    if (playerScore === 5){
-        const h2 = document.createElement("h2")
-        h2.innerText = "YOU WON!"
-        outcomeDiv.appendChild(h2)
-    } else if (computerScore === 5){
-        const h2 = document.createElement("h2")
-        h2.innerText = "YOU LOST!"
-        outcomeDiv.appendChild(h2)
-    }
-    
+//function for game is still playable (!gameEnded) means not gameEnded
+function playGame(playerSelection, computerChoice){
+    if (!gameEnded) {
+       playRound(playerSelection, computerChoice);
+    } 
 }
-//Adding the scores to the page
-const updateScores = (playerScore, computerScore) =>{
-    playerSpan.innerText = `${playerScore}`
-    compSpan.innerText = `${computerScore}`
-}
+
+function endGame(){
+    console.log("game ended")
+}    
 
 //add eventListener to buttons
 rockButton.addEventListener("click", () => {
     const computerChoice = getComputerChoice()
     const playerSelection = "rock"
-    playRound(playerSelection,computerChoice)
+    playGame(playerSelection,computerChoice)
     updateScores(playerScore, computerScore)
     whoWon(playerScore, computerScore)
+    
 })
 paperButton.addEventListener("click", () => {
     const computerChoice = getComputerChoice()
     const playerSelection = "paper"
-    playRound(playerSelection,computerChoice)
+    playGame(playerSelection,computerChoice)
     updateScores(playerScore, computerScore)
     whoWon(playerScore, computerScore)
+  
+    
 })
 scissorsButton.addEventListener("click", () => {
     const computerChoice = getComputerChoice()
     const playerSelection = "scissors"
-    playRound(playerSelection,computerChoice)
+    playGame(playerSelection,computerChoice)
     updateScores(playerScore, computerScore)
     whoWon(playerScore, computerScore)
+   
+    
 })
 
 
-
 //Created function for 5 rounds and to call the score at the end.
-//const playGame = () => {
-    //for(let i = 0; i < 5; i++)
-       // const playerSelection = prompt ("Rock, Paper, Scissors").toLowerCase
-       // const computerChoice = getComputerChoice
-//}
+
+
 
 
 
